@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>NetSphere - Social Platform</title>
   <base href="./">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400 ;500;600;700&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -30,34 +30,6 @@
       background-image: 
         radial-gradient(circle at 10% 20%, rgba(0, 212, 255, 0.1) 0%, transparent 20%),
         radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.1) 0%, transparent 20%);
-    }
-    
-    /* CRITICAL FIX: Error Messages */
-    .error-msg {
-      display: none;
-      background: rgba(255, 56, 96, 0.2);
-      color: var(--danger);
-      padding: 12px;
-      border-radius: 8px;
-      margin-bottom: 16px;
-      border: 1px solid var(--danger);
-      font-size: 0.9rem;
-    }
-    
-    .error-msg.show {
-      display: block;
-    }
-    
-    .form-group {
-      margin-bottom: 16px;
-    }
-    
-    .form-group label {
-      display: block;
-      margin-bottom: 6px;
-      color: var(--text);
-      font-weight: 500;
-      font-size: 0.9rem;
     }
     
     /* Animated Logo */
@@ -745,7 +717,6 @@
     }
   </style>
 <base target="_blank">
-<base target="_blank">
 </head>
 <body>
   <div id="loading">
@@ -1307,7 +1278,7 @@
             ${impersonateBanner}
             
             <div class="card">
-              <div class="create-post" style="display:flex; gap:12px;">
+              <div class="create-post">
                 <div class="avatar" style="flex-shrink:0;">
                   ${impersonatingUser 
                     ? (impersonatingUser.avatar ? `<img src="${impersonatingUser.avatar}" style="width:100%; height:100%; object-fit:cover;">` : impersonatingUser.displayName[0].toUpperCase())
@@ -1315,9 +1286,9 @@
                   }
                 </div>
                 <div style="flex:1;">
-                  <textarea id="post-content" placeholder="${impersonatingUser ? `Posting as ${impersonatingUser.displayName}...` : 'What\'s on your mind?'}" style="background:transparent; border:none; color:var(--text); width:100%; min-height:80px; resize:vertical; font-family:inherit;"></textarea>
-                  <div class="create-post-actions" style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; margin-top:12px; display:flex; justify-content:space-between; align-items:center;">
-                    <label class="media-btn" style="cursor:pointer; color:var(--accent); font-size:0.9rem;">
+                  <textarea id="post-content" placeholder="${impersonatingUser ? `Posting as ${impersonatingUser.displayName}...` : 'What\'s on your mind?'}" style="background:transparent; border:none; color:var(--text); width:100%; min-height:80px; resize:vertical;"></textarea>
+                  <div class="create-post-actions" style="border-top:1px solid rgba(255,255,255,0.1); padding-top:12px; margin-top:12px;">
+                    <label class="media-btn" style="cursor:pointer; color:var(--accent);">
                       📷 Media
                       <input type="file" id="post-media" accept="image/*,video/*" style="display:none;" onchange="Posts.previewMedia(event)">
                     </label>
@@ -1330,7 +1301,7 @@
             
             <div id="posts-container">
               ${posts.length === 0 
-                ? '<div class="card empty-state" style="text-align:center; padding:40px;"><div style="font-size:3rem; margin-bottom:16px;">🌌</div><p style="color:var(--text-sec);">No posts yet. Start the conversation!</p></div>'
+                ? '<div class="card empty-state"><div style="font-size:3rem; margin-bottom:16px;">🌌</div><p>No posts yet. Start the conversation!</p></div>'
                 : posts.map(post => this.renderPost(post)).join('')
               }
             </div>
@@ -1355,7 +1326,7 @@
         return `
           <div class="card" data-post-id="${post.id}">
             <div class="post-header">
-              <div class="avatar" onclick="Router.navigate('profile/${author.username}')" style="cursor:pointer;">
+              <div class="avatar" onclick="Router.navigate('profile/${author.username}')" style="cursor:pointer; ${author.avatar ? '' : ''}">
                 ${author.avatar 
                   ? `<img src="${author.avatar}" style="width:100%; height:100%; object-fit:cover;">`
                   : (author.displayName?.[0]?.toUpperCase() || 'U')
@@ -1394,7 +1365,7 @@
                 <span>${post.comments.length}</span>
               </div>
               ${canEdit ? `
-                <div class="post-action" onclick="Posts.edit('${post.id}')" style="margin-left:auto;">
+                <div class="post-action" onclick="Posts.edit('${post.id}')" style="margin-left:auto; margin-right:auto;">
                   <span>✏️</span>
                 </div>
               ` : ''}
@@ -1412,8 +1383,8 @@
                 if (commenter.shadowBanned && c.userId !== currentUser?.id && !currentUser?.isDev) return '';
                 return `
                   <div class="comment" style="display:flex; gap:12px; margin-bottom:12px;">
-                    <div class="avatar small" style="width:32px; height:32px; font-size:0.9rem;">
-                      ${commenter.avatar ? `<img src="${commenter.avatar}" style="width:100%; height:100%; object-fit:cover;">` : (commenter.displayName?.[0]?.toUpperCase() || 'U')}
+                    <div class="avatar small">
+                      ${commenter.avatar ? `<img src="${commenter.avatar}">` : (commenter.displayName?.[0]?.toUpperCase() || 'U')}
                     </div>
                     <div style="background:var(--surface-light); padding:8px 12px; border-radius:12px; flex:1;">
                       <div style="font-weight:600; font-size:0.875rem; display:flex; align-items:center; gap:4px;">
@@ -1426,8 +1397,8 @@
                 `;
               }).join('')}
               <div style="display:flex; gap:12px; margin-top:12px;">
-                <div class="avatar small" style="width:32px; height:32px; font-size:0.9rem;">
-                  ${currentUser.avatar ? `<img src="${currentUser.avatar}" style="width:100%; height:100%; object-fit:cover;">` : currentUser.displayName[0].toUpperCase()}
+                <div class="avatar small">
+                  ${currentUser.avatar ? `<img src="${currentUser.avatar}">` : currentUser.displayName[0].toUpperCase()}
                 </div>
                 <input type="text" id="comment-input-${post.id}" placeholder="Write a comment..." style="flex:1;" onkeypress="if(event.key==='Enter') Posts.comment('${post.id}')">
                 <button class="btn btn-small" onclick="Posts.comment('${post.id}')">Post</button>
@@ -1448,9 +1419,10 @@
         
         const posts = DB.getPosts()
           .filter(p => p.userId === profile.id)
-          .filter(p => !profile.shadowBanned || currentUser?.isDev || p.userId === currentUser?.id)
+          .filter(p => !p.userId.shadowBanned || currentUser?.isDev || p.userId === currentUser?.id) // Filter shadow banned
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
         
+        // Don't show shadow banned profiles to non-devs (except their own)
         if (profile.shadowBanned && profile.id !== currentUser?.id && !currentUser?.isDev) {
           Utils.showToast('User not found', 'error');
           Router.navigate('/');
@@ -1481,8 +1453,8 @@
                   </div>
                   ${currentUser?.isDev && profile.shadowBanned ? '<div style="position:absolute; bottom:0; right:-10px; background:var(--danger); color:white; padding:4px 8px; border-radius:8px; font-size:0.75rem; font-weight:bold;">SHADOW BANNED</div>' : ''}
                 </div>
-                <div class="profile-name" style="margin-top:16px;">
-                  <h1 style="display:inline; margin-right:8px;">${profile.displayName}</h1>
+                <div class="profile-name">
+                  <h1>${profile.displayName}</h1>
                   ${profile.isVerified ? '<span class="verified" style="width:22px; height:22px; font-size:12px;">✓</span>' : ''}
                   ${profile.isDev ? '<span style="background:var(--accent); color:black; padding:2px 8px; border-radius:6px; font-size:0.75rem; font-weight:bold;">DEV</span>' : ''}
                 </div>
@@ -1490,18 +1462,18 @@
                 ${profile.bio ? `<p style="margin-top:12px; color:var(--text);">${Utils.escapeHtml(profile.bio)}</p>` : ''}
                 ${profile.shadowBanned ? '<p style="color:var(--danger); font-size:0.875rem; margin-top:8px;">🔇 Account restricted</p>' : ''}
                 
-                <div class="profile-stats" style="display:flex; gap:24px; margin-top:16px; border-top:1px solid rgba(255,255,255,0.1); padding-top:16px;">
-                  <div>
+                <div class="profile-stats">
+                  <div onclick="Router.navigate('profile/${profile.username}')" style="cursor:pointer;">
                     <strong>${posts.length}</strong>
-                    <span style="color:var(--text-sec); display:block; font-size:0.875rem;">Posts</span>
+                    <span>Posts</span>
                   </div>
                   <div>
                     <strong>${profile.followers.length}</strong>
-                    <span style="color:var(--text-sec); display:block; font-size:0.875rem;">Followers</span>
+                    <span>Followers</span>
                   </div>
                   <div>
                     <strong>${profile.following.length}</strong>
-                    <span style="color:var(--text-sec); display:block; font-size:0.875rem;">Following</span>
+                    <span>Following</span>
                   </div>
                 </div>
                 
@@ -1529,6 +1501,7 @@
         const posts = DB.getPosts();
         const logs = SystemLog.getLogs();
         
+        // Calculate storage
         const storageUsed = new Blob([JSON.stringify(localStorage)]).size;
         
         const stats = {
@@ -1565,6 +1538,7 @@
               <button class="btn btn-outline" onclick="Router.navigate('dev')">🔄 Refresh</button>
             </div>
             
+            <!-- Stats Grid -->
             <div class="dev-grid">
               <div class="dev-card">
                 <h3>👥 Users</h3>
@@ -1598,6 +1572,7 @@
               </div>
             </div>
             
+            <!-- Impersonation -->
             <div class="card" style="background:linear-gradient(135deg, rgba(255,221,87,0.1), transparent); border:1px solid var(--warning);">
               <h3 style="color:var(--warning); margin-bottom:16px;">👻 Account Impersonation</h3>
               <div style="display:flex; gap:12px; align-items:end; flex-wrap:wrap;">
@@ -1617,6 +1592,7 @@
               ` : ''}
             </div>
             
+            <!-- User Management Table -->
             <div class="card" style="padding:0; overflow:hidden; margin-top:24px;">
               <div style="padding:20px; border-bottom:1px solid rgba(255,255,255,0.1);">
                 <h3>User Management</h3>
@@ -1636,7 +1612,7 @@
                       <tr style="border-bottom:1px solid rgba(255,255,255,0.05);">
                         <td style="padding:12px;">
                           <div style="display:flex; align-items:center; gap:12px;">
-                            <div class="avatar small" style="width:32px; height:32px; font-size:0.9rem;">
+                            <div class="avatar small">
                               ${u.avatar ? `<img src="${u.avatar}">` : u.displayName[0].toUpperCase()}
                             </div>
                             <div>
@@ -1682,6 +1658,7 @@
               </div>
             </div>
             
+            <!-- System Logs -->
             <div class="card" style="margin-top:24px;">
               <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
                 <h3>📜 System Logs (Last 20)</h3>
@@ -1708,14 +1685,14 @@
         const user = users.find(u => (u.username === username || u.email === username) && u.password === password);
         
         if (!user) {
-          errorDiv.textContent = '❌ Invalid credentials';
+          errorDiv.textContent = 'Invalid credentials';
           errorDiv.classList.add('show');
           SystemLog.add('AUTH_FAIL', 'Failed login attempt', { username });
           return;
         }
         
         if (user.banned) {
-          errorDiv.textContent = `🚫 Account banned: ${user.banReason}`;
+          errorDiv.textContent = `Account banned: ${user.banReason}`;
           errorDiv.classList.add('show');
           return;
         }
@@ -1731,106 +1708,68 @@
         Router.navigate('/');
       },
       
-      // FIXED REGISTRATION FUNCTION
       handleRegister(e) {
         e.preventDefault();
-        e.stopPropagation();
-        
+        const username = document.getElementById('reg-username').value;
+        const email = document.getElementById('reg-email').value;
+        const password = document.getElementById('reg-password').value;
+        const confirm = document.getElementById('reg-confirm').value;
+        const displayName = document.getElementById('reg-display').value;
         const errorDiv = document.getElementById('register-error');
-        errorDiv.classList.remove('show');
         
-        try {
-          const username = document.getElementById('reg-username').value.trim();
-          const email = document.getElementById('reg-email').value.trim();
-          const password = document.getElementById('reg-password').value;
-          const confirm = document.getElementById('reg-confirm').value;
-          const displayName = document.getElementById('reg-display').value.trim();
-          
-          console.log('Registering:', username, email);
-          
-          // Validation checks
-          if (!username || !email || !password) {
-            throw new Error('Please fill in all required fields (marked with *)');
-          }
-          
-          if (password !== confirm) {
-            throw new Error("Passwords don't match");
-          }
-          
-          if (password.length < 6) {
-            throw new Error("Password must be at least 6 characters");
-          }
-          
-          if (!/^[a-zA-Z0-9_]+$/.test(username)) {
-            throw new Error("Username can only contain letters, numbers, and underscores");
-          }
-          
-          const users = DB.getUsers();
-          
-          // Check duplicates
-          if (users.find(u => u.username === username)) {
-            throw new Error('Username already taken');
-          }
-          
-          if (users.find(u => u.email === email)) {
-            throw new Error('Email already registered');
-          }
-          
-          // Create user
-          const newUser = {
-            id: Utils.generateId(),
-            username: username,
-            email: email,
-            password: password,
-            displayName: displayName || username,
-            bio: '',
-            avatar: null,
-            cover: null,
-            isVerified: false,
-            isAdmin: false,
-            isDev: false,
-            isOnline: true,
-            status: 'online',
-            createdAt: new Date().toISOString(),
-            followers: [],
-            following: [],
-            posts: 0,
-            banned: false,
-            shadowBanned: false,
-            banReason: null,
-            lastIP: null,
-            metadata: {}
-          };
-          
-          users.push(newUser);
-          
-          // Save to storage with error handling
-          try {
-            DB.saveUsers(users);
-            DB.saveCurrentUser(newUser);
-          } catch (storageErr) {
-            console.error('Storage error:', storageErr);
-            throw new Error('Browser storage full! Try incognito mode or clear data.');
-          }
-          
-          currentUser = newUser;
-          
-          Utils.showToast('Account created successfully! 🎉', 'success');
-          console.log('Registration complete:', username);
-          SystemLog.add('AUTH', 'New user registered', { username });
-          
-          setTimeout(() => {
-            Router.navigate('/');
-          }, 500);
-          
-        } catch (error) {
-          console.error('Registration failed:', error);
-          errorDiv.textContent = error.message;
+        if (password !== confirm) {
+          errorDiv.textContent = "Passwords don't match";
           errorDiv.classList.add('show');
-          
-          // Scroll to error
-          errorDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+          return;
         }
+        
+        const users = DB.getUsers();
+        
+        if (users.find(u => u.username === username)) {
+          errorDiv.textContent = 'Username taken';
+          errorDiv.classList.add('show');
+          return;
+        }
+        
+        if (users.find(u => u.email === email)) {
+          errorDiv.textContent = 'Email registered';
+          errorDiv.classList.add('show');
+          return;
+        }
+        
+        const newUser = {
+          id: Utils.generateId(),
+          username,
+          email,
+          password,
+          displayName: displayName || username,
+          bio: '',
+          avatar: null,
+          cover: null,
+          isVerified: false,
+          isAdmin: false,
+          isDev: false,
+          isOnline: true,
+          status: 'online',
+          createdAt: new Date().toISOString(),
+          followers: [],
+          following: [],
+          posts: 0,
+          banned: false,
+          shadowBanned: false,
+          banReason: null,
+          lastIP: null,
+          metadata: {}
+        };
+        
+        users.push(newUser);
+        DB.saveUsers(users);
+        SystemLog.add('AUTH', 'New user registered', { username });
+        
+        currentUser = newUser;
+        DB.saveCurrentUser(newUser);
+        Utils.showToast('Account created!', 'success');
+        Router.navigate('/');
       },
       
       logout() {
@@ -1900,7 +1839,7 @@
             SystemLog.add('PROFILE', 'Avatar updated', { username: currentUser.username });
             Utils.showToast('Profile picture updated!', 'success');
             Router.handle();
-            Views.showSettings();
+            Views.showSettings(); // Refresh settings view
           }
         };
         reader.readAsDataURL(file);
@@ -2001,6 +1940,7 @@
         const postingAs = impersonatingUser || currentUser;
         const isImpersonating = !!impersonatingUser;
         
+        // Shadow ban check - if shadow banned, only they see their post
         if (postingAs.shadowBanned && !isImpersonating) {
           Utils.showToast('Posted! (Pending review)');
         }
@@ -2152,6 +2092,67 @@
     
     // Dev Tools
     const Dev = {
+      showCreateModal() {
+        const modal = document.createElement('div');
+        modal.className = 'modal-overlay show';
+        modal.innerHTML = `
+          <div class="modal">
+            <h3 style="margin-bottom:16px;">Create Test User</h3>
+            <form id="create-user-form">
+              <div class="form-group">
+                <input type="text" id="fake-username" placeholder="Username" required>
+              </div>
+              <div class="form-group">
+                <input type="text" id="fake-display" placeholder="Display Name">
+              </div>
+              <div class="form-group">
+                <label><input type="checkbox" id="fake-verified" style="width:auto; margin-right:8px;"> Verified</label>
+              </div>
+              <div style="display:flex; gap:12px;">
+                <button type="button" class="btn btn-outline" style="flex:1;" onclick="this.closest('.modal-overlay').remove()">Cancel</button>
+                <button type="submit" class="btn" style="flex:1;">Create</button>
+              </div>
+            </form>
+          </div>
+        `;
+        document.body.appendChild(modal);
+        
+        document.getElementById('create-user-form').addEventListener('submit', (e) => {
+          e.preventDefault();
+          const username = document.getElementById('fake-username').value;
+          const users = DB.getUsers();
+          
+          if (users.find(u => u.username === username)) {
+            Utils.showToast('Username exists', 'error');
+            return;
+          }
+          
+          const newUser = {
+            id: Utils.generateId(),
+            username,
+            email: `${username}@test.com`,
+            password: 'password',
+            displayName: document.getElementById('fake-display').value || username,
+            isVerified: document.getElementById('fake-verified').checked,
+            isDev: false,
+            isOnline: true,
+            createdAt: new Date().toISOString(),
+            followers: [],
+            following: [],
+            posts: 0,
+            banned: false,
+            shadowBanned: false
+          };
+          
+          users.push(newUser);
+          DB.saveUsers(users);
+          SystemLog.add('ADMIN', 'Test user created', { username });
+          document.querySelector('.modal-overlay').remove();
+          Utils.showToast('User created', 'success');
+          Router.navigate('dev');
+        });
+      },
+      
       verify(userId, verify) {
         const users = DB.getUsers();
         const idx = users.findIndex(u => u.id === userId);
@@ -2210,6 +2211,17 @@
         }
         SystemLog.add('ADMIN', 'Mass deleted user posts', { user: user?.username });
         Utils.showToast('All posts deleted');
+        Router.navigate('dev');
+      },
+      
+      deleteUser(userId) {
+        if (!confirm('DELETE USER?\n\nThis removes account and all posts. Cannot be undone!')) return;
+        let users = DB.getUsers().filter(u => u.id !== userId);
+        let posts = DB.getPosts().filter(p => p.userId !== userId);
+        DB.saveUsers(users);
+        DB.savePosts(posts);
+        SystemLog.add('ADMIN', 'User deleted', { userId });
+        Utils.showToast('User deleted');
         Router.navigate('dev');
       },
       
